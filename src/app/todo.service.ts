@@ -13,8 +13,14 @@ export class TodosService {
   private _todos = signal<Todo[]>([]);
   readonly todos = this._todos.asReadonly();
 
+  searchQuery = signal<string>('');
+
   updateTodosSignal(updater: (prev: Todo[]) => Todo[]) {
     this._todos.update(updater);
+  }
+
+  updateSearchQuery(query: string) {
+    this.searchQuery.set(query);
   }
 
   getTodos() {

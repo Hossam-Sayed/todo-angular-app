@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -16,6 +16,7 @@ import { Todo, TodoPriority } from '../todo/todo.model';
 })
 export class NewTodoComponent {
   todosService = inject(TodosService);
+  private destroyRef = inject(DestroyRef);
 
   form = new FormGroup({
     text: new FormControl('', {
@@ -35,7 +36,7 @@ export class NewTodoComponent {
       isCompleted: false,
     };
 
-    this.todosService
+    const subscription = this.todosService
       .withOptimisticUpdate({
         optimisticUpdate: () =>
           this.todosService.updateTodosSignal((prev) => [...prev, newTodo]),
@@ -59,6 +60,10 @@ export class NewTodoComponent {
           );
         },
       });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
 
     this.form.reset({ text: '', priority: 'Medium' });
   }

@@ -23,11 +23,15 @@ export class TodoListComponent implements OnInit {
   private todosService = inject(TodosService);
   private destroyRef = inject(DestroyRef);
 
-  todos = computed(() =>
-    this.todosService
-      .todos()
-      .filter((t) => t.isCompleted === this.isCompleted())
-  );
+  filteredTodos = computed(() => {
+    const todos = this.todosService.todos();
+    const search = this.todosService.searchQuery();
+    return todos.filter(
+      (t) =>
+        t.isCompleted === this.isCompleted() &&
+        t.text.toLowerCase().includes(search)
+    );
+  });
 
   ngOnInit(): void {
     const subscription = this.todosService.getTodos().subscribe({

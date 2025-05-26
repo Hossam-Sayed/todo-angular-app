@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input } from '@angular/core';
 import { Todo } from './todo.model';
 import { CommonModule } from '@angular/common';
 import { TodosService } from '../todo.service';
@@ -11,6 +11,7 @@ import { TodosService } from '../todo.service';
 })
 export class TodoComponent {
   todo = input.required<Todo>();
+  private destroyRef = inject(DestroyRef);
   todosService = inject(TodosService);
   status = computed(() => (this.todo().isCompleted ? 'Undo' : 'Done'));
 
@@ -18,7 +19,7 @@ export class TodoComponent {
     const todo = this.todo();
     const updatedIsCompleted = !todo.isCompleted;
 
-    this.todosService
+    const subscription = this.todosService
       .withOptimisticUpdate({
         optimisticUpdate: () =>
           this.todosService.updateTodosSignal((prev) =>
@@ -41,5 +42,9 @@ export class TodoComponent {
           // Show an error notification/toast
         },
       });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }
