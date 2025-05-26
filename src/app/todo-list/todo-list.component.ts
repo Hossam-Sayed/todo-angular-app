@@ -23,14 +23,15 @@ export class TodoListComponent implements OnInit {
   private todosService = inject(TodosService);
   private destroyRef = inject(DestroyRef);
 
-  todos = signal<Todo[] | undefined>(undefined);
+  todos = computed(() =>
+    this.todosService
+      .todos()
+      .filter((t) => t.isCompleted === this.isCompleted())
+  );
 
   ngOnInit(): void {
     const subscription = this.todosService.getTodos().subscribe({
-      next: (todos) =>
-        this.todos.set(
-          todos.filter((todo) => todo.isCompleted === this.isCompleted())
-        ),
+      next: (todos) => this.todosService.updateTodosSignal(() => todos),
       error: (error: Error) => console.log(error),
       complete: () => {},
     });

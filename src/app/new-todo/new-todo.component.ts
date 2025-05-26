@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TodosService } from '../todo.service';
-import { TodoPriority } from '../todo/todo.model';
+import { Todo, TodoPriority } from '../todo/todo.model';
 
 @Component({
   selector: 'app-new-todo',
@@ -27,11 +27,39 @@ export class NewTodoComponent {
   });
 
   onSubmit() {
-    console.log(this.form);
-    this.todosService.addTodo({
+    const tempId = 'temp-' + Math.random().toString();
+    const newTodo: Todo = {
+      id: tempId,
       text: this.form.controls.text.value!,
       priority: this.form.controls.priority.value!,
-    });
-    this.form.controls.text.reset();
+      isCompleted: false,
+    };
+
+    this.todosService
+      .withOptimisticUpdate({
+        optimisticUpdate: () =>
+          this.todosService.updateTodosSignal((prev) => [...prev, newTodo]),
+
+        rollback: () =>
+          this.todosService.updateTodosSignal((prev) =>
+            prev.filter((t) => t.id !== tempId)
+          ),
+
+        request: () =>
+          this.todosService.addTodo({
+            text: newTodo.text,
+            priority: newTodo.priority,
+          }),
+      })
+      .subscribe({
+        next: (res: any) => {
+          const realId = res.name.split('/').pop();
+          this.todosService.updateTodosSignal((prev) =>
+            prev.map((t) => (t.id === tempId ? { ...t, id: realId! } : t))
+          );
+        },
+      });
+
+    this.form.reset({ text: '', priority: 'Medium' });
   }
 }
