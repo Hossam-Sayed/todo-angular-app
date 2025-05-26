@@ -1,0 +1,26 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  id="todo-form"
+  class="row gy-2 gx-3 align-items-center mb-4"
+>
+  <div class="col-md-7">
+    <input
+      type="text"
+      class="form-control"
+      id="todo-input"
+      placeholder="Enter new todo"
+      formControlName="text"
+    />
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" id="todo-priority" formControlName="priority">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary w-100">Add</button>
+  </div>
+</form>

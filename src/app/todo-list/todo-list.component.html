@@ -1,0 +1,6 @@
+<h4 class="mb-3">{{ title() }}</h4>
+<ul class="list-group">
+  @for (todo of todos(); track todo.id) {
+  <app-todo [todo]="todo" />
+  }
+</ul>
