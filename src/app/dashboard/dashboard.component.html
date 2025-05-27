@@ -1,0 +1,19 @@
+<div class="container py-4">
+  <h1 class="text-center mb-4">Todo App</h1>
+
+  <!-- New Todo Form -->
+  <app-new-todo />
+
+  <!-- Search -->
+  <app-search />
+
+  <!-- Todo Lists -->
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <app-todo-list title="Pending" [isCompleted]="false" />
+    </div>
+    <div class="col-md-6 mb-3">
+      <app-todo-list title="Complete" [isCompleted]="true" />
+    </div>
+  </div>
+</div>
