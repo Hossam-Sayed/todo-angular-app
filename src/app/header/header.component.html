@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Todo App</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <!-- Left-aligned nav links -->
+      @if (isAuthenticated) {
+      <div class="navbar-nav">
+        <a
+          class="nav-item nav-link"
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          >Dashboard</a
+        >
+      </div>
+      }
+
+      <!-- Right-aligned logout link -->
+      @if (isAuthenticated) {
+      <div class="navbar-nav ms-auto">
+        <a class="nav-item nav-link" (click)="onLogout()">Logout</a>
+      </div>
+      }
+    </div>
+  </div>
+</nav>

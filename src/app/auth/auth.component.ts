@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   styleUrl: './auth.component.css',
 })
 export class AuthComponent {
-  isLoginMode = false;
+  isLoginMode = true;
   error: string = '';
   private authService = inject(AuthService);
   private router = inject(Router);

@@ -5,4 +5,5 @@ export interface Todo {
   text: string;
   priority: TodoPriority;
   isCompleted: boolean;
+  userId?: string;
 }
