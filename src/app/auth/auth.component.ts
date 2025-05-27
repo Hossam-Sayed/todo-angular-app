@@ -5,8 +5,9 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthResponseData, AuthService } from './auth.service';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -41,22 +42,26 @@ export class AuthComponent {
     const email = this.form.controls.email.value!;
     const password = this.form.controls.password.value!;
 
-    if (this.isLoginMode) {
-      // Subscribe on login response
-    } else {
-      const subscription = this.authService.signUp(email, password).subscribe({
-        next: (resData) => console.log(resData),
-        error: (error: Error) => {
-          console.log(error);
-          this.error = error.message;
-        },
-        complete: () => {},
-      });
+    let authObs: Observable<AuthResponseData>;
 
-      this.destroyRef.onDestroy(() => {
-        subscription.unsubscribe();
-      });
+    if (this.isLoginMode) {
+      authObs = this.authService.login(email, password);
+    } else {
+      authObs = this.authService.signUp(email, password);
     }
+
+    const subscription = authObs.subscribe({
+      next: (resData) => console.log(resData),
+      error: (error: Error) => {
+        console.log(error);
+        this.error = error.message;
+      },
+      complete: () => {},
+    });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
 
     this.form.reset();
   }
