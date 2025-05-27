@@ -8,6 +8,7 @@ import {
 import { AuthResponseData, AuthService } from './auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -18,7 +19,8 @@ import { Observable } from 'rxjs';
 export class AuthComponent {
   isLoginMode = false;
   error: string = '';
-  authService = inject(AuthService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
   private destroyRef = inject(DestroyRef);
 
   form = new FormGroup({
@@ -51,7 +53,10 @@ export class AuthComponent {
     }
 
     const subscription = authObs.subscribe({
-      next: (resData) => console.log(resData),
+      next: (resData) => {
+        console.log(resData);
+        this.router.navigate(['/dashboard']);
+      },
       error: (error: Error) => {
         console.log(error);
         this.error = error.message;

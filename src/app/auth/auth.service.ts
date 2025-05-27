@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Subject, tap, throwError } from 'rxjs';
+import { User } from './user.model';
 
 export interface AuthResponseData {
   kind: string;
@@ -17,7 +18,9 @@ export class AuthService {
   API_KEY = 'AIzaSyAtRB4XiOSWmzbz4iveFRV4BR1bByRa1kQ';
   SIGN_UP_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.API_KEY}`;
   LOGIN_URL = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${this.API_KEY}`;
+
   httpClient = inject(HttpClient);
+  user = new Subject<User>();
 
   signUp(email: string, password: string) {
     return this.httpClient
@@ -26,7 +29,17 @@ export class AuthService {
         password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((resData) => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
   }
 
   login(email: string, password: string) {
@@ -36,7 +49,28 @@ export class AuthService {
         password,
         returnSecureToken: true,
       })
-      .pipe(catchError(this.handleError));
+      .pipe(
+        catchError(this.handleError),
+        tap((resData) => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
+  }
+
+  handleAuthentication(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
+  ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
