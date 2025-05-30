@@ -10,8 +10,6 @@ import { AuthService } from './auth/auth.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'todo-app';
-
   private authService = inject(AuthService);
 
   ngOnInit(): void {
