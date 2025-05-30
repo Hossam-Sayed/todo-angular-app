@@ -95,13 +95,13 @@ export class TodosService {
   }
 
   updateTodo(todo: Todo) {
-    const updatedIsCompleted = !todo.isCompleted;
+    const url = `${this.API_URL}${todo.id}/?updateMask.fieldPaths=isCompleted`;
 
-    const url = `${this.API_URL}${todo.id}?updateMask.fieldPaths=isCompleted`;
+    console.log(todo);
 
     const body = {
       fields: {
-        isCompleted: { booleanValue: updatedIsCompleted },
+        isCompleted: { booleanValue: todo.isCompleted },
       },
     };
 

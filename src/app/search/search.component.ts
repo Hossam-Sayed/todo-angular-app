@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TodosService } from '../todo.service';
 import { fromEvent, debounceTime, map } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -18,6 +19,7 @@ import { fromEvent, debounceTime, map } from 'rxjs';
 export class SearchComponent implements AfterViewInit {
   private todosService = inject(TodosService);
   private destroyRef = inject(DestroyRef);
+  router = inject(Router);
 
   @ViewChild('searchInput', { static: true }) searchInput!: ElementRef;
 

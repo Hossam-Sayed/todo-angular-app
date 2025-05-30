@@ -17,6 +17,8 @@ export class TodoComponent {
 
   onClick() {
     const todo = this.todo();
+    console.log(todo);
+
     const updatedIsCompleted = !todo.isCompleted;
 
     const subscription = this.todosService
@@ -35,7 +37,11 @@ export class TodoComponent {
             )
           ),
 
-        request: () => this.todosService.updateTodo(todo),
+        request: () =>
+          this.todosService.updateTodo({
+            ...todo,
+            isCompleted: updatedIsCompleted,
+          }),
       })
       .subscribe({
         error: () => {

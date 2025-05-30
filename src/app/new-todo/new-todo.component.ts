@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { TodosService } from '../todo.service';
 import { Todo, TodoPriority } from '../todo/todo.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-todo',
@@ -17,6 +18,7 @@ import { Todo, TodoPriority } from '../todo/todo.model';
 export class NewTodoComponent {
   todosService = inject(TodosService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   form = new FormGroup({
     text: new FormControl('', {
@@ -28,6 +30,7 @@ export class NewTodoComponent {
   });
 
   onSubmit() {
+    if (this.form.invalid) return;
     const tempId = 'temp-' + Math.random().toString();
     const newTodo: Todo = {
       id: tempId,
@@ -54,10 +57,13 @@ export class NewTodoComponent {
       })
       .subscribe({
         next: (res: any) => {
+          console.log(res);
           const realId = res.name.split('/').pop();
           this.todosService.updateTodosSignal((prev) =>
             prev.map((t) => (t.id === tempId ? { ...t, id: realId! } : t))
           );
+
+          this.router.navigateByUrl('/dashboard');
         },
       });
 

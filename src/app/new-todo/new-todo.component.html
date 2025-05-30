@@ -1,26 +1,41 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  id="todo-form"
-  class="row gy-2 gx-3 align-items-center mb-4"
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
 >
-  <div class="col-md-7">
-    <input
-      type="text"
-      class="form-control"
-      id="todo-input"
-      placeholder="Enter new todo"
-      formControlName="text"
-    />
-  </div>
-  <div class="col-md-3">
-    <select class="form-select" id="todo-priority" formControlName="priority">
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <button type="submit" class="btn btn-primary w-100">Add</button>
-  </div>
-</form>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    id="todo-form"
+    class="p-4 rounded shadow bg-white"
+    style="max-width: 600px; width: 100%"
+  >
+    <h4 class="mb-4 text-center">Add a New Todo</h4>
+
+    <div class="mb-3">
+      <label for="todo-input" class="form-label">Todo Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="todo-input"
+        placeholder="e.g., Finish Angular assignment"
+        formControlName="text"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="todo-priority" class="form-label">Priority</label>
+      <select class="form-select" id="todo-priority" formControlName="priority">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+
+    <button
+      [disabled]="form.invalid"
+      type="submit"
+      class="btn btn-primary w-100"
+    >
+      Add Todo
+    </button>
+  </form>
+</div>

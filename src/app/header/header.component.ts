@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -10,10 +10,15 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent implements OnInit {
   isAuthenticated = false;
   private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.authService.user.subscribe((user) => {
+    const subscription = this.authService.user.subscribe((user) => {
       this.isAuthenticated = !!user;
+    });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
     });
   }
 

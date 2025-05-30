@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">Todo App</a>
 
@@ -22,6 +22,7 @@
           class="nav-item nav-link"
           routerLink="/dashboard"
           routerLinkActive="active"
+          href=""
           >Dashboard</a
         >
       </div>
@@ -30,7 +31,7 @@
       <!-- Right-aligned logout link -->
       @if (isAuthenticated) {
       <div class="navbar-nav ms-auto">
-        <a class="nav-item nav-link" (click)="onLogout()">Logout</a>
+        <a class="nav-item nav-link" href="" (click)="onLogout()">Logout</a>
       </div>
       }
     </div>

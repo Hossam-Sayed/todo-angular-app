@@ -1,8 +1,8 @@
 <li class="list-group-item">
   <span class="me-auto">{{ todo().text }}</span>
   <span class="badge" [ngClass]="'priority-' + todo().priority.toLowerCase()">
-    {{ todo().priority }}</span
-  >
+    {{ todo().priority }}
+  </span>
   <button class="btn btn-sm btn-outline-success" (click)="onClick()">
     {{ status() }}
   </button>

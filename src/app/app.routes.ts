@@ -23,6 +23,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
 
+  // Lazy load the new-todo component
+  {
+    path: 'new-todo',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./new-todo/new-todo.component').then((m) => m.NewTodoComponent),
+  },
+
   // Wildcard
   { path: '**', component: NotFoundComponent },
 ];
