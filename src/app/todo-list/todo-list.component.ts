@@ -5,11 +5,9 @@ import {
   inject,
   input,
   OnInit,
-  signal,
 } from '@angular/core';
 import { TodoComponent } from '../todo/todo.component';
 import { TodosService } from '../todo.service';
-import { Todo } from '../todo/todo.model';
 
 @Component({
   selector: 'app-todo-list',
