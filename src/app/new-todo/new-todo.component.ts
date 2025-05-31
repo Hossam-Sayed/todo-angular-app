@@ -8,6 +8,7 @@ import {
 import { TodosService } from '../todo.service';
 import { Todo, TodoPriority } from '../todo/todo.model';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-new-todo',
@@ -19,6 +20,7 @@ export class NewTodoComponent {
   todosService = inject(TodosService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private location = inject(Location);
 
   form = new FormGroup({
     text: new FormControl('', {
@@ -63,7 +65,8 @@ export class NewTodoComponent {
             prev.map((t) => (t.id === tempId ? { ...t, id: realId! } : t))
           );
 
-          this.router.navigateByUrl('/dashboard');
+          // this.router.navigateByUrl('/dashboard', { replaceUrl: true });
+          this.location.back();
         },
       });
 
